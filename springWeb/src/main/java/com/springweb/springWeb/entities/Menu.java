@@ -33,6 +33,8 @@ public class Menu {
     @JoinColumn(name="Postre_id")
     private Postre postre;
 
+    @Transient
+    private Double precioConIVA;
 
     public Menu() {
     }
@@ -76,6 +78,10 @@ public class Menu {
 
     public void setPrecio(Double precio) {
         this.precio = precio;
+    }
+
+    public Double getPrecioConIVA() {
+        return precio * 1.21;
     }
 
     public Entrante getEntrante() {

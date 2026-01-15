@@ -3,8 +3,6 @@ package com.springweb.springWeb.entities;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name="postres")
 public class Postre {
@@ -23,7 +21,7 @@ public class Postre {
     private Double precio;
 
     @Transient
-    private LocalDateTime fecha_creado = LocalDateTime.now();
+    private Double precioConIVA;
 
     public Postre() {
     }
@@ -67,11 +65,7 @@ public class Postre {
         this.precio = precio;
     }
 
-    public LocalDateTime getFecha_creado() {
-        return fecha_creado;
-    }
-
-    public void setFecha_creado(LocalDateTime fecha_creado) {
-        this.fecha_creado = fecha_creado;
+    public Double getPrecioConIVA() {
+        return precio * 1.21;
     }
 }
