@@ -3,6 +3,10 @@ package com.springweb.springWeb.controllers.RestAPI;
 
 import com.springweb.springWeb.entities.Principal;
 import com.springweb.springWeb.service.PrincipalService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/principales")
+@Tag(name = "Principales", description = "API para gestionar platos principales del restaurante")
 public class PrincipalControllerAPI {
     private final PrincipalService principalService;
 
@@ -17,21 +22,38 @@ public class PrincipalControllerAPI {
         this.principalService = principalService;
     }
 
+    @Operation(summary = "Obtener todos los principales", description = "Devuelve una lista con todos los platos principales disponibles")
+    @ApiResponse(responseCode = "200", description = "Lista de principales obtenida correctamente")
     @GetMapping
     public List<Principal> findAll() {
         return principalService.findAllPrincipales();
     }
 
+    @Operation(summary = "Crear un nuevo principal", description = "Guarda un nuevo plato principal en la base de datos")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Principal creado correctamente"),
+        @ApiResponse(responseCode = "400", description = "Datos del principal no validos")
+    })
     @PostMapping
     public Principal save(@RequestBody Principal principal) {
         return principalService.savePrincipal(principal);
     }
 
+    @Operation(summary = "Buscar principal por ID", description = "Devuelve un plato principal segun su ID")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Principal encontrado"),
+        @ApiResponse(responseCode = "404", description = "Principal no encontrado")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<Principal> findById(@PathVariable Long id) {
         return principalService.findPrincipalById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Actualizar un principal", description = "Actualiza los datos de un plato principal existente")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Principal actualizado correctamente"),
+        @ApiResponse(responseCode = "404", description = "Principal no encontrado")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<Principal> update(@PathVariable Long id, @RequestBody Principal principal) {
         return principalService.findPrincipalById(id).map(principal1 -> {
@@ -42,6 +64,11 @@ public class PrincipalControllerAPI {
         }).orElse(ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Eliminar un principal", description = "Elimina un plato principal de la base de datos")
+    @ApiResponses({
+        @ApiResponse(responseCode = "204", description = "Principal eliminado correctamente"),
+        @ApiResponse(responseCode = "404", description = "Principal no encontrado")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Principal> delete(@PathVariable Long id) {
         if (principalService.findPrincipalById(id).isPresent()) {
