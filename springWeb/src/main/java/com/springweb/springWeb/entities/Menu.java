@@ -73,7 +73,11 @@ public class Menu {
     }
 
     public Double getPrecio() {
-        return precio;
+        double total = 0.0;
+        if (entrante != null && entrante.getPrecio() != null) total += entrante.getPrecio();
+        if (principal != null && principal.getPrecio() != null) total += principal.getPrecio();
+        if (postre != null && postre.getPrecio() != null) total += postre.getPrecio();
+        return total;
     }
 
     public void setPrecio(Double precio) {
@@ -81,7 +85,7 @@ public class Menu {
     }
 
     public Double getPrecioConIVA() {
-        return precio * 1.21;
+        return getPrecio() * 1.21;
     }
 
     public Entrante getEntrante() {

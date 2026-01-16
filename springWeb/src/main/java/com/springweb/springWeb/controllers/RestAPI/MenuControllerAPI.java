@@ -36,7 +36,8 @@ public class MenuControllerAPI {
     })
     @PostMapping
     public Menu save(@RequestBody Menu menu) {
-        return menuService.saveMenu(menu);
+        Menu savedMenu = menuService.saveMenu(menu);
+        return menuService.findMenuById(savedMenu.getId()).orElse(savedMenu);
     }
 
     @Operation(summary = "Buscar menu por ID", description = "Devuelve un menu segun su ID")
@@ -63,7 +64,8 @@ public class MenuControllerAPI {
             menu1.setEntrante(menu.getEntrante());
             menu1.setPrincipal(menu.getPrincipal());
             menu1.setPostre(menu.getPostre());
-            return ResponseEntity.ok(menuService.updateMenu(menu1));
+            Menu updated = menuService.updateMenu(menu1);
+            return ResponseEntity.ok(menuService.findMenuById(updated.getId()).orElse(updated));
         }).orElse(ResponseEntity.notFound().build());
     }
 

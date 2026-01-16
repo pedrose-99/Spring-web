@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title> <!--Variable que recibe del backend-->
+</head>
+<body>
+    <h1 th:text="${encabezado}"></h1>
+
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Precio (Sin IVA)</th>
+                <th>Precio con IVA</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="entidad: ${entidades}">
+                <td th:text="${entidad.id}"></td>
+                <td th:text="${entidad.nombre}"></td>
+                <td th:text="${entidad.descripcion}"></td>
+                <td th:text="${entidad.precio}"></td>
+                <td th:text="${entidad.precioConIVA}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
