@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title>
+</head>
+<body>
+    <h1 th:text="${encabezado}"></h1>
+
+    <!-- Si existe la entidad -->
+    <div th:if="${entidad}">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Precio (Sin IVA)</th>
+                <th>Precio con IVA</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${entidad.id}"></td>
+                <td th:text="${entidad.nombre}"></td>
+                <td th:text="${entidad.descripcion}"></td>
+                <td th:text="${entidad.precio}"></td>
+                <td th:text="${entidad.precioConIVA}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Si no existe -->
+    <div th:if="${error}">
+        <p th:text="${error}" style="color: red;"></p>
+    </div>
+</body>
+</html>

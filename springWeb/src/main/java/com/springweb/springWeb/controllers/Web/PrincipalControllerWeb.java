@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -28,5 +29,22 @@ public class PrincipalControllerWeb {
                 .addAttribute("entidades", principales);
 
         return "list";
+    }
+
+    @GetMapping(params = "nombre")
+    public String viewByName(Model model, @RequestParam String nombre) {
+        model.addAttribute("title", "Buscar principal por nombre")
+                .addAttribute("encabezado", "Resultado de la búsqueda");
+
+        List<Principal> principales = principalService.findAllPrincipales();
+        for (Principal principal : principales) {
+            if (principal.getNombre().equals(nombre)) {
+                model.addAttribute("entidad", principal);
+                return "listByNombre";
+            }
+        }
+
+        model.addAttribute("error", "El principal '" + nombre + "' no existe");
+        return "listByNombre";
     }
 }

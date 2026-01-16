@@ -32,6 +32,13 @@ public class Entrante {
         this.precio = precio;
     }
 
+    public Entrante(Long id, String nombre, String descripcion, Double precio, Double precioConIVA) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.precioConIVA = precioConIVA;
+    }
 
     public Long getId() {
         return id;

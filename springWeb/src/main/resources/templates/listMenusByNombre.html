@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title>
+</head>
+<body>
+    <h1 th:text="${encabezado}"></h1>
+
+    <!-- Si existen menus -->
+    <div th:if="${menus}">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Entrante</th>
+                <th>Principal</th>
+                <th>Postre</th>
+                <th>Precio Total</th>
+                <th>Precio con IVA</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="menu : ${menus}">
+                <td th:text="${menu.id}"></td>
+                <td th:text="${menu.nombre}"></td>
+                <td th:text="${menu.descripcion}"></td>
+                <td th:text="${menu.entrante?.nombre}"></td>
+                <td th:text="${menu.principal?.nombre}"></td>
+                <td th:text="${menu.postre?.nombre}"></td>
+                <td th:text="${menu.precio}"></td>
+                <td th:text="${menu.precioConIVA}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Si no existe -->
+    <div th:if="${error}">
+        <p th:text="${error}" style="color: red;"></p>
+    </div>
+</body>
+</html>

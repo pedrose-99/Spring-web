@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -32,5 +33,22 @@ public class EntranteControllerWeb {
 
         return "list";
 
+    }
+
+    @GetMapping(params = "nombre")
+    public String viewByName(Model model, @RequestParam String nombre) {
+        model.addAttribute("title", "Buscar entrante por nombre")
+                .addAttribute("encabezado", "Resultado de la búsqueda");
+
+        List<Entrante> entrantes = entranteService.findAllEntrantes();
+        for (Entrante entrante : entrantes) {
+            if (entrante.getNombre().equals(nombre)) {
+                model.addAttribute("entidad", entrante);
+                return "listByNombre";
+            }
+        }
+
+        model.addAttribute("error", "El entrante '" + nombre + "' no existe");
+        return "listByNombre";
     }
 }
