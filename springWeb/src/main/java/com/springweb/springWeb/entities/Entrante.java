@@ -11,13 +11,13 @@ public class Entrante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="Nombre")
+    @Column(name="Nombre", nullable = false)
     private String nombre;
 
     @Column(name="Descripcion")
     private String descripcion;
 
-    @Column(name="Precio")
+    @Column(name="Precio", nullable = false)
     private Double precio;
 
     @Transient

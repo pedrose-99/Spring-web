@@ -12,25 +12,25 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="Nombre")
+    @Column(name="Nombre", nullable = false)
     private String nombre;
 
     @Column(name="Descripcion")
     private String descripcion;
 
-    @Column(name="Precio_Menu")
+    @Column(name="Precio_Menu", nullable = false)
     private Double precio;
 
     @ManyToOne //Muchos a uno
-    @JoinColumn(name="Entrante_id") //Clave foranea
+    @JoinColumn(name="Entrante_id", nullable = false) //Clave foranea
     private Entrante entrante;
 
     @ManyToOne
-    @JoinColumn(name="Principal_id")
+    @JoinColumn(name="Principal_id", nullable = false)
     private Principal principal;
 
     @ManyToOne
-    @JoinColumn(name="Postre_id")
+    @JoinColumn(name="Postre_id", nullable = false)
     private Postre postre;
 
     @Transient
