@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Sesion Iniciada</h1>
+
+    <div>
+        <table>
+            <tr>
+                <th>Usuario</th>
+                <td th:text="${session.userName}"></td>
+            </tr>
+            <tr>
+                <th>Rol</th>
+                <td th:text="${session.role}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+
+    <div>
+        <a href="/cliente/info">
+            <button type="button">Ir a Info</button>
+        </a>
+        <a href="/cliente/logout">
+            <button type="button">Cerrar Sesion</button>
+        </a>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title>
+</head>
+<body>
+    <h1>Informacion del Cliente</h1>
+
+    <!-- Headers -->
+    <h2>Headers</h2>
+    <div>
+        <table>
+            <tr>
+                <th>Navegador</th>
+                <td th:text="${navegador}"></td>
+            </tr>
+            <tr>
+                <th>Idioma (Header)</th>
+                <td th:text="${idiomaHeader}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+
+    <!-- Cookies -->
+    <h2>Cookies</h2>
+    <div>
+        <table>
+            <tr>
+                <th>Idioma preferido</th>
+                <td th:text="${idiomaCookie}"></td>
+            </tr>
+        </table>
+        <br>
+        <p>Cambiar idioma:</p>
+        <a href="/cliente/idioma?idioma=es">
+            <button type="button">Espanol</button>
+        </a>
+        <a href="/cliente/idioma?idioma=en">
+            <button type="button">Ingles</button>
+        </a>
+        <a href="/cliente/idioma?idioma=fr">
+            <button type="button">Frances</button>
+        </a>
+    </div>
+
+    <br>
+
+    <!-- Sesion -->
+    <h2>Sesion</h2>
+
+    <!-- Si hay sesion iniciada -->
+    <div th:if="${session.userName != null}">
+        <table>
+            <tr>
+                <th>Usuario</th>
+                <td th:text="${session.userName}"></td>
+            </tr>
+            <tr>
+                <th>Rol</th>
+                <td th:text="${session.role}"></td>
+            </tr>
+        </table>
+        <br>
+        <a href="/cliente/logout">
+            <button type="button">Cerrar Sesion</button>
+        </a>
+    </div>
+
+    <!-- Si NO hay sesion iniciada -->
+    <div th:if="${session.userName == null}">
+        <p>No has iniciado sesion</p>
+        <a href="/cliente/login">
+            <button type="button">Iniciar Sesion</button>
+        </a>
+    </div>
+
+</body>
+</html>
