@@ -2,7 +2,10 @@ package com.springweb.springWeb.entities;
 
 
 import jakarta.persistence.*;
-import com.springweb.springWeb.entities.Postre;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name="menu")
@@ -12,23 +15,31 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El nombre es obligatorio")
+    @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres")
     @Column(name="Nombre", nullable = false)
     private String nombre;
 
+    @Size(max = 255, message = "La descripcion no puede superar los 255 caracteres")
     @Column(name="Descripcion")
     private String descripcion;
 
+    @NotNull(message = "El precio es obligatorio")
+    @Min(value = 0, message = "El precio no puede ser negativo")
     @Column(name="Precio_Menu", nullable = false)
     private Double precio;
 
+    @NotNull(message = "El entrante es obligatorio")
     @ManyToOne //Muchos a uno
     @JoinColumn(name="Entrante_id", nullable = false) //Clave foranea
     private Entrante entrante;
 
+    @NotNull(message = "El principal es obligatorio")
     @ManyToOne
     @JoinColumn(name="Principal_id", nullable = false)
     private Principal principal;
 
+    @NotNull(message = "El postre es obligatorio")
     @ManyToOne
     @JoinColumn(name="Postre_id", nullable = false)
     private Postre postre;

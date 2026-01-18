@@ -7,10 +7,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/entrantes")
@@ -35,8 +39,13 @@ public class EntranteControllerAPI {
         @ApiResponse(responseCode = "400", description = "Datos del entrante no validos")
     })
     @PostMapping
-    public Entrante save(@RequestBody Entrante entrante) {
-        return entranteService.saveEntrante(entrante);
+    public ResponseEntity<?> save(@Valid @RequestBody Entrante entrante, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errores = new HashMap<>();
+            result.getFieldErrors().forEach(e -> errores.put(e.getField(), e.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errores);
+        }
+        return ResponseEntity.ok(entranteService.saveEntrante(entrante));
     }
 
     @Operation(summary = "Buscar entrante por ID", description = "Devuelve un entrante segun su ID")
@@ -55,8 +64,13 @@ public class EntranteControllerAPI {
         @ApiResponse(responseCode = "404", description = "Entrante no encontrado")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Entrante> update(@PathVariable Long id, @RequestBody Entrante entrante) {
-        return entranteService.findEntranteById(id).map(entrante1 ->  {
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody Entrante entrante, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errores = new HashMap<>();
+            result.getFieldErrors().forEach(e -> errores.put(e.getField(), e.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errores);
+        }
+        return entranteService.findEntranteById(id).map(entrante1 -> {
             entrante1.setNombre(entrante.getNombre());
             entrante1.setDescripcion(entrante.getDescripcion());
             entrante1.setPrecio(entrante.getPrecio());

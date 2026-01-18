@@ -7,10 +7,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/postres")
@@ -35,8 +39,13 @@ public class PostreControllerAPI {
         @ApiResponse(responseCode = "400", description = "Datos del postre no validos")
     })
     @PostMapping
-    public Postre save(@RequestBody Postre postre) {
-        return postreService.savePostre(postre);
+    public ResponseEntity<?> save(@Valid @RequestBody Postre postre, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errores = new HashMap<>();
+            result.getFieldErrors().forEach(e -> errores.put(e.getField(), e.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errores);
+        }
+        return ResponseEntity.ok(postreService.savePostre(postre));
     }
 
     @Operation(summary = "Buscar postre por ID", description = "Devuelve un postre segun su ID")
@@ -55,7 +64,12 @@ public class PostreControllerAPI {
         @ApiResponse(responseCode = "404", description = "Postre no encontrado")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Postre> update(@PathVariable Long id, @RequestBody Postre postre) {
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody Postre postre, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errores = new HashMap<>();
+            result.getFieldErrors().forEach(e -> errores.put(e.getField(), e.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errores);
+        }
         return postreService.findPostreById(id).map(postre1 -> {
             postre1.setNombre(postre.getNombre());
             postre1.setDescripcion(postre.getDescripcion());

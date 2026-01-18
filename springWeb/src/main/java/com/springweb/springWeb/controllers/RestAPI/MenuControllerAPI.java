@@ -7,10 +7,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/menus")
@@ -35,9 +39,14 @@ public class MenuControllerAPI {
         @ApiResponse(responseCode = "400", description = "Datos del menu no validos")
     })
     @PostMapping
-    public Menu save(@RequestBody Menu menu) {
+    public ResponseEntity<?> save(@Valid @RequestBody Menu menu, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errores = new HashMap<>();
+            result.getFieldErrors().forEach(e -> errores.put(e.getField(), e.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errores);
+        }
         Menu savedMenu = menuService.saveMenu(menu);
-        return menuService.findMenuById(savedMenu.getId()).orElse(savedMenu);
+        return ResponseEntity.ok(menuService.findMenuById(savedMenu.getId()).orElse(savedMenu));
     }
 
     @Operation(summary = "Buscar menu por ID", description = "Devuelve un menu segun su ID")
@@ -56,7 +65,12 @@ public class MenuControllerAPI {
         @ApiResponse(responseCode = "404", description = "Menu no encontrado")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Menu> update(@PathVariable Long id, @RequestBody Menu menu) {
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody Menu menu, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errores = new HashMap<>();
+            result.getFieldErrors().forEach(e -> errores.put(e.getField(), e.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errores);
+        }
         return menuService.findMenuById(id).map(menu1 -> {
             menu1.setNombre(menu.getNombre());
             menu1.setDescripcion(menu.getDescripcion());

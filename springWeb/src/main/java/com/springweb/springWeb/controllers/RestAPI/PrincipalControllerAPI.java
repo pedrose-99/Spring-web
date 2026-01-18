@@ -7,10 +7,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/principales")
@@ -35,8 +39,13 @@ public class PrincipalControllerAPI {
         @ApiResponse(responseCode = "400", description = "Datos del principal no validos")
     })
     @PostMapping
-    public Principal save(@RequestBody Principal principal) {
-        return principalService.savePrincipal(principal);
+    public ResponseEntity<?> save(@Valid @RequestBody Principal principal, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errores = new HashMap<>();
+            result.getFieldErrors().forEach(e -> errores.put(e.getField(), e.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errores);
+        }
+        return ResponseEntity.ok(principalService.savePrincipal(principal));
     }
 
     @Operation(summary = "Buscar principal por ID", description = "Devuelve un plato principal segun su ID")
@@ -55,7 +64,12 @@ public class PrincipalControllerAPI {
         @ApiResponse(responseCode = "404", description = "Principal no encontrado")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Principal> update(@PathVariable Long id, @RequestBody Principal principal) {
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody Principal principal, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errores = new HashMap<>();
+            result.getFieldErrors().forEach(e -> errores.put(e.getField(), e.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errores);
+        }
         return principalService.findPrincipalById(id).map(principal1 -> {
             principal1.setNombre(principal.getNombre());
             principal1.setDescripcion(principal.getDescripcion());
