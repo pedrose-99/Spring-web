@@ -2,7 +2,7 @@
 
 Proyecto basado en el patrón MVC (Modelo-Vista-Controlador) de Spring. La idea es separar la lógica de negocio de la presentación: los modelos representan los datos (entrantes, principales, postres, menús), las vistas renderizan el HTML con Thymeleaf, y los controladores gestionan las peticiones del usuario.
 
-Además de las vistas web, el proyecto incluye una API REST para poder consumir los datos desde otras aplicaciones.
+Además de las vistas web, el proyecto incluye una API REST para poder consumir los datos desde otras aplicaciones
 
 ## Tecnologías
 
