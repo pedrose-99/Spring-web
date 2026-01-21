@@ -2,19 +2,18 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${title}"></title> <!--Variable que recibe del backend-->
+    <title th:text="${title}"></title>
     <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
 </head>
 <body>
-    <h1 th:text="${encabezado}"></h1>
-
-    <div>
+    <div class="container mt-4">
+        <h1 th:text="${encabezado}" class="mb-4"></h1>
         <table class="table table-striped table-bordered">
             <thead>
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
-                <th>Descripción</th>
+                <th>Descripcion</th>
                 <th>Precio (Sin IVA)</th>
                 <th>Precio con IVA</th>
             </tr>
@@ -29,6 +28,17 @@
             </tr>
             </tbody>
         </table>
+
+        <!-- Botones de navegacion -->
+        <div class="mt-4">
+            <a th:href="@{/entrantes/lista}" class="btn btn-primary">Entrantes</a>
+            <a th:href="@{/principales/lista}" class="btn btn-success">Principales</a>
+            <a th:href="@{/postres/lista}" class="btn btn-warning">Postres</a>
+            <a th:href="@{/menus/lista}" class="btn btn-info">Menus</a>
+            <a th:href="@{/cliente/info}" class="btn btn-secondary">Info Cliente</a>
+        </div>
     </div>
+
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

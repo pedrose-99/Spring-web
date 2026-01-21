@@ -10,6 +10,7 @@ Además de las vistas web, el proyecto incluye una API REST para poder consumir 
 - Spring Boot 3.5.9
 - MySQL 8.0
 - Thymeleaf (vistas web)
+- Bootstrap (estilos)
 - JPA/Hibernate
 - Docker
 

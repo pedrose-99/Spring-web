@@ -1,6 +1,7 @@
 package com.springweb.springWeb.entities;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -13,11 +14,12 @@ public class Menu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
     @NotBlank(message = "El nombre es obligatorio")
     @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres")
-    @Column(name="Nombre", nullable = false)
+    @Column(name="Nombre", nullable = false, unique = true)
     private String nombre;
 
     @Size(max = 255, message = "La descripcion no puede superar los 255 caracteres")
@@ -45,6 +47,7 @@ public class Menu {
     private Postre postre;
 
     @Transient
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Double precioConIVA;
 
     public Menu() {
