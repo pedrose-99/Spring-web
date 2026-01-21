@@ -29,8 +29,8 @@ public class PostreControllerAPI {
     @Operation(summary = "Obtener todos los postres", description = "Devuelve una lista con todos los postres disponibles")
     @ApiResponse(responseCode = "200", description = "Lista de postres obtenida correctamente")
     @GetMapping
-    public List<Postre> findAll() {
-        return postreService.findAllPostres();
+    public ResponseEntity<List<Postre>> findAll() {
+        return ResponseEntity.ok(postreService.findAllPostres());
     }
 
     @Operation(summary = "Crear un nuevo postre", description = "Guarda un nuevo postre en la base de datos")
@@ -84,12 +84,13 @@ public class PostreControllerAPI {
         @ApiResponse(responseCode = "404", description = "Postre no encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Postre> delete(@PathVariable Long id) {
-        if (postreService.findPostreById(id).isPresent()) {
-            postreService.deletePostreById(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        return postreService.findPostreById(id)
+            .map(postre -> {
+                postreService.deletePostreById(id);
+                return ResponseEntity.noContent().<Void>build();
+            })
+            .orElse(ResponseEntity.notFound().build());
     }
 
 }

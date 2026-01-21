@@ -29,8 +29,8 @@ public class EntranteControllerAPI {
     @Operation(summary = "Obtener todos los entrantes", description = "Devuelve una lista con todos los entrantes disponibles")
     @ApiResponse(responseCode = "200", description = "Lista de entrantes obtenida correctamente")
     @GetMapping
-    public List<Entrante> findAll() {
-        return entranteService.findAllEntrantes();
+    public ResponseEntity<List<Entrante>> findAll() {
+        return ResponseEntity.ok(entranteService.findAllEntrantes());
     }
 
     @Operation(summary = "Crear un nuevo entrante", description = "Guarda un nuevo entrante en la base de datos")
@@ -84,12 +84,13 @@ public class EntranteControllerAPI {
         @ApiResponse(responseCode = "404", description = "Entrante no encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Entrante> delete(@PathVariable Long id) {
-        if (entranteService.findEntranteById(id).isPresent()) {
-            entranteService.deleteEntranteById(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        return entranteService.findEntranteById(id)
+            .map(entrante -> {
+                entranteService.deleteEntranteById(id);
+                return ResponseEntity.noContent().<Void>build();
+            })
+            .orElse(ResponseEntity.notFound().build());
     }
 
 }

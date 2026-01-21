@@ -43,9 +43,4 @@ public class MenuService {
         menuRepository.deleteById(id);
     }
 
-    @Transactional
-    public void deleteMenu(Menu menu){
-        menuRepository.delete(menu);
-    }
-
 }

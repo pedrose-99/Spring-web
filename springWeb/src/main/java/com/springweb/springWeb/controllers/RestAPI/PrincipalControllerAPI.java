@@ -29,8 +29,8 @@ public class PrincipalControllerAPI {
     @Operation(summary = "Obtener todos los principales", description = "Devuelve una lista con todos los platos principales disponibles")
     @ApiResponse(responseCode = "200", description = "Lista de principales obtenida correctamente")
     @GetMapping
-    public List<Principal> findAll() {
-        return principalService.findAllPrincipales();
+    public ResponseEntity<List<Principal>> findAll() {
+        return ResponseEntity.ok(principalService.findAllPrincipales());
     }
 
     @Operation(summary = "Crear un nuevo principal", description = "Guarda un nuevo plato principal en la base de datos")
@@ -84,12 +84,13 @@ public class PrincipalControllerAPI {
         @ApiResponse(responseCode = "404", description = "Principal no encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Principal> delete(@PathVariable Long id) {
-        if (principalService.findPrincipalById(id).isPresent()) {
-            principalService.deletePrincipalById(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        return principalService.findPrincipalById(id)
+            .map(principal -> {
+                principalService.deletePrincipalById(id);
+                return ResponseEntity.noContent().<Void>build();
+            })
+            .orElse(ResponseEntity.notFound().build());
     }
 
 }

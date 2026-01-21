@@ -43,9 +43,4 @@ public class PrincipalService {
         principalRepository.deleteById(id);
     }
 
-    @Transactional
-    public void deletePrincipal(Principal principal){
-        principalRepository.delete(principal);
-    }
-
 }

@@ -43,9 +43,4 @@ public class PostreService {
         postreRepository.deleteById(id);
     }
 
-    @Transactional
-    public void deletePostre(Postre postre){
-        postreRepository.delete(postre);
-    }
-
 }

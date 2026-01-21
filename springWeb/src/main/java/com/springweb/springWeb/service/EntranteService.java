@@ -43,10 +43,6 @@ public class EntranteService {
         entranteRepository.deleteById(id);
     }
 
-    @Transactional
-    public void deleteEntrante(Entrante entrante){
-        entranteRepository.delete(entrante);
-    }
 
 
 

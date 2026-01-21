@@ -29,8 +29,8 @@ public class MenuControllerAPI {
     @Operation(summary = "Obtener todos los menus", description = "Devuelve una lista con todos los menus disponibles")
     @ApiResponse(responseCode = "200", description = "Lista de menus obtenida correctamente")
     @GetMapping
-    public List<Menu> findAll() {
-        return menuService.findAllMenus();
+    public ResponseEntity<List<Menu>> findAll() {
+        return ResponseEntity.ok(menuService.findAllMenus());
     }
 
     @Operation(summary = "Crear un nuevo menu", description = "Guarda un nuevo menu en la base de datos")
@@ -89,12 +89,13 @@ public class MenuControllerAPI {
         @ApiResponse(responseCode = "404", description = "Menu no encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Menu> delete(@PathVariable Long id) {
-        if (menuService.findMenuById(id).isPresent()) {
-            menuService.deleteMenuById(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        return menuService.findMenuById(id)
+            .map(menu -> {
+                menuService.deleteMenuById(id);
+                return ResponseEntity.noContent().<Void>build();
+            })
+            .orElse(ResponseEntity.notFound().build());
     }
 
 }

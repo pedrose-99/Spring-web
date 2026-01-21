@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title th:text="${title}"></title> <!--Variable que recibe del backend-->
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
 </head>
 <body>
     <h1 th:text="${encabezado}"></h1>
 
     <div>
-        <table>
+        <table class="table table-striped table-bordered">
             <thead>
             <tr>
                 <th>ID</th>
