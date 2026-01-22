@@ -48,7 +48,7 @@ public class PostreControllerAPI {
         return ResponseEntity.ok(postreService.savePostre(postre));
     }
 
-    @Operation(summary = "Buscar postre por ID", description = "Devuelve un postre segun su ID")
+    @Operation(summary = "Buscar postre por ID", description = "Devuelve un postre según su ID")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Postre encontrado"),
         @ApiResponse(responseCode = "404", description = "Postre no encontrado")

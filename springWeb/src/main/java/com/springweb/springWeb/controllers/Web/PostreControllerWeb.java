@@ -38,7 +38,7 @@ public class PostreControllerWeb {
 
         List<Postre> postres = postreService.findAllPostres();
         for (Postre postre : postres) {
-            if (postre.getNombre().equals(nombre)) {
+            if (postre.getNombre().equalsIgnoreCase(nombre)) {
                 model.addAttribute("entidad", postre);
                 return "listByNombre";
             }

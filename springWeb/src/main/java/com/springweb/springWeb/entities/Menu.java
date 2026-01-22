@@ -26,9 +26,8 @@ public class Menu {
     @Column(name="Descripcion")
     private String descripcion;
 
-    @NotNull(message = "El precio es obligatorio")
     @Min(value = 0, message = "El precio no puede ser negativo")
-    @Column(name="Precio_Menu", nullable = false)
+    @Column(name="Precio_Menu")
     private Double precio;
 
     @NotNull(message = "El entrante es obligatorio")

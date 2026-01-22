@@ -48,7 +48,7 @@ public class EntranteControllerAPI {
         return ResponseEntity.ok(entranteService.saveEntrante(entrante));
     }
 
-    @Operation(summary = "Buscar entrante por ID", description = "Devuelve un entrante segun su ID")
+    @Operation(summary = "Buscar entrante por ID", description = "Devuelve un entrante según su ID")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Entrante encontrado"),
         @ApiResponse(responseCode = "404", description = "Entrante no encontrado")

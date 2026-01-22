@@ -48,7 +48,7 @@ public class PrincipalControllerAPI {
         return ResponseEntity.ok(principalService.savePrincipal(principal));
     }
 
-    @Operation(summary = "Buscar principal por ID", description = "Devuelve un plato principal segun su ID")
+    @Operation(summary = "Buscar principal por ID", description = "Devuelve un plato principal según su ID")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Principal encontrado"),
         @ApiResponse(responseCode = "404", description = "Principal no encontrado")

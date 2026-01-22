@@ -38,7 +38,7 @@ public class PrincipalControllerWeb {
 
         List<Principal> principales = principalService.findAllPrincipales();
         for (Principal principal : principales) {
-            if (principal.getNombre().equals(nombre)) {
+            if (principal.getNombre().equalsIgnoreCase(nombre)) {
                 model.addAttribute("entidad", principal);
                 return "listByNombre";
             }

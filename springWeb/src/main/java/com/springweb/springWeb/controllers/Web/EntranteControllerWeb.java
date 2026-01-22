@@ -42,7 +42,7 @@ public class EntranteControllerWeb {
 
         List<Entrante> entrantes = entranteService.findAllEntrantes();
         for (Entrante entrante : entrantes) {
-            if (entrante.getNombre().equals(nombre)) {
+            if (entrante.getNombre().equalsIgnoreCase(nombre)) {
                 model.addAttribute("entidad", entrante);
                 return "listByNombre";
             }

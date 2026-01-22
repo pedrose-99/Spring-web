@@ -14,6 +14,9 @@
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Descripción</th>
+                <th>Entrante</th>
+                <th>Principal</th>
+                <th>Postre</th>
                 <th>Precio (Sin IVA)</th>
                 <th>Precio con IVA</th>
             </tr>
@@ -23,6 +26,9 @@
                 <td th:text="${entidad.id}"></td>
                 <td th:text="${entidad.nombre}"></td>
                 <td th:text="${entidad.descripcion}"></td>
+                <td th:text="${entidad.entrante?.nombre}"></td>
+                <td th:text="${entidad.principal?.nombre}"></td>
+                <td th:text="${entidad.postre?.nombre}"></td>
                 <td th:text="${entidad.precio}"></td>
                 <td th:text="${entidad.precioConIVA}"></td>
             </tr>

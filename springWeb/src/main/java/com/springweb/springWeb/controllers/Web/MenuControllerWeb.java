@@ -28,7 +28,7 @@ public class MenuControllerWeb {
                 .addAttribute("encabezado", "Vista de los menus del restaurante")
                 .addAttribute("entidades", menus);
 
-        return "list";
+        return "listMenu";
     }
 
     @GetMapping(params = "nombreEntrante")
@@ -37,7 +37,7 @@ public class MenuControllerWeb {
                 .addAttribute("encabezado", "Resultado de la búsqueda");
 
         List<Menu> menus = menuService.findAllMenus();
-        menus.removeIf(menu -> !menu.getEntrante().getNombre().equals(nombreEntrante));
+        menus.removeIf(menu -> !menu.getEntrante().getNombre().equalsIgnoreCase(nombreEntrante));
 
         if (menus.isEmpty()) {
             model.addAttribute("error", "Ningún menu tiene el entrante con nombre '" + nombreEntrante + "'");
@@ -53,7 +53,7 @@ public class MenuControllerWeb {
                 .addAttribute("encabezado", "Resultado de la búsqueda");
 
         List<Menu> menus = menuService.findAllMenus();
-        menus.removeIf(menu -> !menu.getPrincipal().getNombre().equals(nombrePrincipal));
+        menus.removeIf(menu -> !menu.getPrincipal().getNombre().equalsIgnoreCase(nombrePrincipal));
 
         if (menus.isEmpty()) {
             model.addAttribute("error", "Ningún menu tiene el principal con nombre '" + nombrePrincipal + "'");
@@ -69,7 +69,7 @@ public class MenuControllerWeb {
                 .addAttribute("encabezado", "Resultado de la búsqueda");
 
         List<Menu> menus = menuService.findAllMenus();
-        menus.removeIf(menu -> !menu.getPostre().getNombre().equals(nombrePostre));
+        menus.removeIf(menu -> !menu.getPostre().getNombre().equalsIgnoreCase(nombrePostre));
 
         if (menus.isEmpty()) {
             model.addAttribute("error", "Ningún menu tiene el postre con nombre '" + nombrePostre + "'");
