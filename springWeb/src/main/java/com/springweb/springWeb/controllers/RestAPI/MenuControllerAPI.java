@@ -1,6 +1,7 @@
 package com.springweb.springWeb.controllers.RestAPI;
 
 
+import com.springweb.springWeb.assembler.MenuModelAssembler;
 import com.springweb.springWeb.entities.Menu;
 import com.springweb.springWeb.service.EntranteService;
 import com.springweb.springWeb.service.MenuService;
@@ -16,6 +17,11 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+import java.util.stream.Collectors;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,22 +35,28 @@ public class MenuControllerAPI {
     private final EntranteService entranteService;
     private final PrincipalService principalService;
     private final PostreService postreService;
+    private final MenuModelAssembler assembler;
 
     public MenuControllerAPI(MenuService menuService, EntranteService entranteService,
-                             PrincipalService principalService, PostreService postreService) {
+                             PrincipalService principalService, PostreService postreService, MenuModelAssembler assembler) {
         this.menuService = menuService;
         this.entranteService = entranteService;
         this.principalService = principalService;
         this.postreService = postreService;
+        this.assembler = assembler;
     }
 
     @Operation(summary = "Obtener todos los menus", description = "Devuelve una lista con todos los menus disponibles")
     @ApiResponse(responseCode = "200", description = "Lista de menus obtenida correctamente")
     @GetMapping
-    public ResponseEntity<List<Menu>> findAll() {
-        return ResponseEntity.ok(menuService.findAllMenus());
-    }
+    public CollectionModel<EntityModel<Menu>> findAll() {
+        List<EntityModel<Menu>> menus = menuService.findAllMenus().stream()
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
 
+        return CollectionModel.of(menus,
+                linkTo(methodOn(MenuControllerAPI.class).findAll()).withSelfRel());
+    }
     @Operation(summary = "Crear un nuevo menu", description = "Guarda un nuevo menu en la base de datos")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Menu creado correctamente"),
@@ -86,7 +98,12 @@ public class MenuControllerAPI {
         menu.setPostre(postre.get());
 
         Menu savedMenu = menuService.saveMenu(menu);
-        return ResponseEntity.ok(menuService.findMenuById(savedMenu.getId()).orElse(savedMenu));
+        Menu menuCompleto = menuService.findMenuById(savedMenu.getId()).orElse(savedMenu);
+        EntityModel<Menu> entityModel = assembler.toModel(menuCompleto);
+
+        return ResponseEntity
+                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(entityModel);
     }
 
     @Operation(summary = "Buscar menu por ID", description = "Devuelve un menu según su ID")
@@ -94,9 +111,13 @@ public class MenuControllerAPI {
         @ApiResponse(responseCode = "200", description = "Menu encontrado"),
         @ApiResponse(responseCode = "404", description = "Menu no encontrado")
     })
+
     @GetMapping("/{id}")
-    public ResponseEntity<Menu> findById(@PathVariable Long id) {
-        return menuService.findMenuById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<EntityModel<Menu>> findById(@PathVariable Long id) {
+        return menuService.findMenuById(id)
+                .map(assembler::toModel)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Actualizar un menu", description = "Actualiza los datos de un menu existente, incluyendo entrante, principal y postre")
@@ -142,8 +163,10 @@ public class MenuControllerAPI {
             menu1.setEntrante(entrante.get());
             menu1.setPrincipal(principal.get());
             menu1.setPostre(postre.get());
+
             Menu updated = menuService.updateMenu(menu1);
-            return ResponseEntity.ok(menuService.findMenuById(updated.getId()).orElse(updated));
+            Menu menuCompleto = menuService.findMenuById(updated.getId()).orElse(updated);
+            return ResponseEntity.ok(assembler.toModel(menuCompleto));
         }).orElse(ResponseEntity.notFound().build());
     }
 
